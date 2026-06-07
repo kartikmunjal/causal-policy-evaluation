@@ -56,6 +56,20 @@ Fetch scripts cache raw files under `data/raw/` and write provenance metadata wi
 
 This repo starts with a single treated state and its control border counties to validate the pipeline before scaling. Results are not hard-coded into the README. After running the pipeline, generated tables and figures appear in `report/`.
 
+Current validation snapshot from the cached 2015-2023 BLS QCEW NJ/PA border-county panel:
+
+- Sample: 90 county-pair-year rows.
+- Baseline single-cohort DiD employment estimate: -0.0286 log points.
+- Pyfixest LPDID validation estimate: 0.0038 log points.
+- Event-study pre-period leads: 0.0137, 0.0322, and 0.0343 log points for event years -4, -3, and -2. This is not clean parallel-trends evidence.
+- Margin decomposition: employment -0.0286, establishments 0.0021, employment per establishment -0.0307, average annual pay 0.0312 log points.
+- Bite/dose-response estimates: employment -0.0267, employment per establishment -0.0300, average annual pay 0.0285.
+- Synthetic-control Burlington County post-period treated-minus-synthetic gap: -0.1144 log points; placebo p-value 0.889.
+- Secondary IV estimate: 2.1004; first-stage partial F-statistic 52.046 in the validation sample.
+- Border-spillover test: not identified in the current validation panel because there are no interior or unexposed comparison controls.
+
+These are validation findings, not final national estimates. The two-state NJ/PA panel is useful for surfacing mechanisms and checking code, but publishable inference requires the audited national panel with enough state clusters.
+
 Required outputs:
 
 - `report/event_study.png`

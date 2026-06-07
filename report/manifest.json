@@ -1,12 +1,12 @@
 {
-  "created_at_utc": "2026-06-07T19:35:33.868173+00:00",
+  "created_at_utc": "2026-06-07T22:06:35.343110+00:00",
   "python": "3.11.14",
   "platform": "macOS-14.4-arm64-arm-64bit",
   "files": [
     {
       "path": "README.md",
-      "sha256": "8602c96a3fdd41b322af5a2e8daca8bce9baf715262f6d260339f5fb81f876da",
-      "bytes": 7199
+      "sha256": "bef793974624f9fd3c754f508a065f1d0124a72732f77bb9f4bb3e03ace64aa6",
+      "bytes": 8448
     },
     {
       "path": "data/raw/.gitkeep",
