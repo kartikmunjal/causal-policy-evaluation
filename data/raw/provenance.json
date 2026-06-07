@@ -1,0 +1,16 @@
+[
+  {
+    "name": "BLS QCEW annual county data",
+    "url": "https://data.bls.gov/cew/data/files/2015/csv/2015_annual_by_area.zip",
+    "fetched_on": "2026-06-07",
+    "vintage": "2015-2023 annual files",
+    "notes": "County ownership code 5, NAICS 722 food services and drinking places."
+  },
+  {
+    "name": "State minimum wage dates",
+    "url": "https://www.dol.gov/agencies/whd/state/minimum-wage/history",
+    "fetched_on": "2026-06-07",
+    "vintage": "Documented project table; verify against state/DOL sources before final reporting.",
+    "notes": "Cached as data/raw/minimum_wage_policy_dates.csv."
+  }
+]

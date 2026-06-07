@@ -1,0 +1,2 @@
+term,estimate,bootstrap_p_value,reps,n_clusters,warning
+treated:post,-0.02858355003079069,0.43434343434343436,99,2,True

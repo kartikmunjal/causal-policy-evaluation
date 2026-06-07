@@ -1,0 +1,2 @@
+estimator,term,estimate,std_error,p_value,nobs
+single_cohort_border_pair_did,treated:post,-0.02858355003079069,6.266708345286174e-11,0.0,90

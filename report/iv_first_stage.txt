@@ -1,0 +1,35 @@
+          First Stage Estimation Results          
+==================================================
+                           endogenous_labor_demand
+--------------------------------------------------
+R-squared                                   0.8606
+Partial R-squared                           0.1799
+Shea's R-squared                            0.1799
+Partial F-statistic                         52.046
+P-value (Partial F-stat)                 5.421e-13
+Partial F-stat Distn                       chi2(1)
+==========================             ===========
+Intercept                                  -0.0439
+                                         (-1.4142)
+C(year)[T.2016]                             0.0917
+                                          (3.6328)
+C(year)[T.2017]                             0.0754
+                                          (2.7023)
+C(year)[T.2018]                             0.0896
+                                          (2.5034)
+C(year)[T.2019]                             0.0869
+                                          (2.5004)
+C(year)[T.2020]                            -0.1057
+                                         (-2.0127)
+C(year)[T.2021]                             0.2518
+                                          (17.233)
+C(year)[T.2022]                             0.1834
+                                          (9.8118)
+C(year)[T.2023]                             0.1100
+                                          (4.0062)
+bartik                                      2.5315
+                                          (7.2143)
+--------------------------------------------------
+
+T-stats reported in parentheses
+T-stats use same covariance type as original model

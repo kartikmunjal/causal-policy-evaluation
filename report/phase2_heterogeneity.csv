@@ -1,0 +1,9 @@
+outcome,heterogeneity_dimension,base_treated_post,interaction_estimate,interaction_std_error,interaction_p_value,nobs
+log_employment,large_establishment_county,-0.12574923340244398,0.1214571042145537,1.282971951497624e-14,0.0,90
+log_establishments,large_establishment_county,-0.0520502953199875,0.06771048790452833,5.825314045383509e-15,0.0,90
+log_emp_per_establishment,large_establishment_county,-0.0736989380824565,0.053746616310026474,2.7790251942278245e-15,0.0,90
+log_avg_annual_pay,large_establishment_county,0.059766762274551286,-0.0357578096745294,9.917666392312193e-15,0.0,90
+log_employment,high_pregrowth_county,-0.07280906801787884,0.11056379496771575,1.3853558109915432e-15,0.0,90
+log_establishments,high_pregrowth_county,-0.022518110096833997,0.06159051275118671,1.5648551158753126e-15,0.0,90
+log_emp_per_establishment,high_pregrowth_county,-0.05029095792104498,0.04897328221652898,6.649984678700709e-16,0.0,90
+log_avg_annual_pay,high_pregrowth_county,0.041639305948573145,-0.026196978534091447,1.6674690700234828e-15,0.0,90

@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+.venv*/
+.DS_Store
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/raw/minimum_wage_policy_dates.csv
+!data/raw/provenance.json
+!data/processed/.gitkeep
