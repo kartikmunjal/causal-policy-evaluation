@@ -10,7 +10,7 @@ import pandas as pd
 import requests
 
 
-CENSUS_ADJACENCY_URL = "https://www2.census.gov/geo/docs/reference/county_adjacency/county_adjacency2024.zip"
+CENSUS_ADJACENCY_URL = "https://www2.census.gov/geo/docs/reference/county_adjacency/county_adjacency2024.txt"
 
 STATE_FIPS_TO_ABBR = {
     "01": "AL", "02": "AK", "04": "AZ", "05": "AR", "06": "CA", "08": "CO", "09": "CT", "10": "DE",
@@ -25,7 +25,7 @@ STATE_FIPS_TO_ABBR = {
 
 def fetch_county_adjacency(raw_dir: Path, timeout: int = 120) -> Path:
     raw_dir.mkdir(parents=True, exist_ok=True)
-    dest = raw_dir / "county_adjacency2024.zip"
+    dest = raw_dir / "county_adjacency2024.txt"
     if dest.exists():
         return dest
     response = requests.get(CENSUS_ADJACENCY_URL, timeout=timeout)
@@ -40,16 +40,31 @@ def load_county_adjacency(path: Path) -> pd.DataFrame:
     Census publishes a fixed-width-ish text file inside a zip. The first county
     name appears only on the first adjacent row, so forward-fill is required.
     """
-    with ZipFile(path) as zf:
-        name = next(item for item in zf.namelist() if item.endswith(".txt"))
-        text = zf.read(name).decode("latin1")
-    raw = pd.read_fwf(
-        io.StringIO(text),
-        names=["county_name", "county_fips", "neighbor_name", "neighbor_fips"],
-        dtype=str,
-    )
-    raw["county_name"] = raw["county_name"].ffill()
-    raw["county_fips"] = raw["county_fips"].ffill().str.zfill(5)
+    if path.suffix == ".zip":
+        with ZipFile(path) as zf:
+            name = next(item for item in zf.namelist() if item.endswith(".txt"))
+            text = zf.read(name).decode("latin1")
+    else:
+        text = path.read_text(encoding="latin1")
+    if "|" in text.splitlines()[0]:
+        raw = pd.read_csv(io.StringIO(text), sep="|", dtype=str)
+        raw = raw.rename(
+            columns={
+                "County Name": "county_name",
+                "County GEOID": "county_fips",
+                "Neighbor Name": "neighbor_name",
+                "Neighbor GEOID": "neighbor_fips",
+            }
+        )
+    else:
+        raw = pd.read_fwf(
+            io.StringIO(text),
+            names=["county_name", "county_fips", "neighbor_name", "neighbor_fips"],
+            dtype=str,
+        )
+        raw["county_name"] = raw["county_name"].ffill()
+        raw["county_fips"] = raw["county_fips"].ffill()
+    raw["county_fips"] = raw["county_fips"].str.zfill(5)
     raw["neighbor_fips"] = raw["neighbor_fips"].str.zfill(5)
     raw = raw[raw["county_fips"].str.match(r"^\d{5}$", na=False)]
     raw = raw[raw["neighbor_fips"].str.match(r"^\d{5}$", na=False)]

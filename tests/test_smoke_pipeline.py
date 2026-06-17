@@ -15,6 +15,7 @@ from causal_policy_evaluation.economics import (
 )
 from causal_policy_evaluation.geography import build_state_border_pairs
 from causal_policy_evaluation.inference import cluster_count, joint_pretrend_test, placebo_policy_years
+from causal_policy_evaluation.minimum_wage import detect_minimum_wage_changes, fred_series_id
 from causal_policy_evaluation.plots import plot_event_study
 from causal_policy_evaluation.policy import policy_seed, validate_policy_table
 from causal_policy_evaluation.synthetic_control import fit_simple_synth, placebo_permutation_gaps
@@ -90,3 +91,19 @@ def test_phase2_economic_extensions_smoke():
     spillover = assess_border_spillover_identification(df)
     assert spillover.loc[0, "identified"] is False or spillover.loc[0, "identified"] == False
     assert not specification_curve(df).empty
+
+
+def test_fred_minimum_wage_change_detection():
+    series = pd.DataFrame(
+        {
+            "state": ["NJ", "NJ", "NJ", "PA"],
+            "date": pd.to_datetime(["2018-01-01", "2019-01-01", "2020-01-01", "2019-01-01"]),
+            "minimum_wage": [8.85, 10.0, 11.0, 7.25],
+            "series_id": ["STTMINWGNJ", "STTMINWGNJ", "STTMINWGNJ", "STTMINWGPA"],
+            "source_url": ["https://fred.stlouisfed.org/graph/fredgraph.csv?id=STTMINWGNJ"] * 4,
+        }
+    )
+    changes = detect_minimum_wage_changes(series, start_year=2019, end_year=2020)
+    assert fred_series_id("NJ") == "STTMINWGNJ"
+    assert len(changes) == 2
+    assert set(changes["policy_year"]) == {2019, 2020}

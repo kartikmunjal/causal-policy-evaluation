@@ -1,0 +1,5 @@
+outcome,label,estimate,std_error,p_value,nobs,interpretation
+log_employment,Employment,-0.06487599213503117,2.376966810402787,0.9782255578052617,23219,log-point DiD effect
+log_establishments,Establishments,-0.0049371388288093065,,,23196,log-point DiD effect
+log_emp_per_establishment,Employment per establishment,-0.2201693098196652,22.07480923370453,0.9920422061746446,23196,log-point DiD effect
+log_avg_annual_pay,Average annual pay,0.01992976085608188,2.020373990734219,0.9921294816326021,19323,log-point DiD effect

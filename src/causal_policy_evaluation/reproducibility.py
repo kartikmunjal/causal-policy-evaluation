@@ -32,6 +32,8 @@ def write_manifest(root: Path, output: Path | None = None) -> Path:
             rel = path.relative_to(root).as_posix()
             if rel == "report/manifest.json":
                 continue
+            if rel.endswith("_sample.csv"):
+                continue
             if ".venv" in rel or "__pycache__" in rel or rel.endswith(".zip") or rel.endswith(".parquet"):
                 continue
             files.append({"path": rel, "sha256": sha256_file(path), "bytes": path.stat().st_size})

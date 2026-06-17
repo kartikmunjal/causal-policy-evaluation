@@ -12,6 +12,10 @@ import statsmodels.formula.api as smf
 HOURS_PER_YEAR = 2080
 
 
+def _drop_model_missing(df: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
+    return df.replace([np.inf, -np.inf], np.nan).dropna(subset=cols)
+
+
 def add_economic_margins(df: pd.DataFrame, treated_min_wage: float = 10.0, control_min_wage: float = 7.25) -> pd.DataFrame:
     """Add interpretable economic margins and a policy-bite measure.
 
@@ -67,10 +71,11 @@ def estimate_margin_decomposition(df: pd.DataFrame, cluster: str = "state") -> p
     }
     rows = []
     for outcome, label in outcomes.items():
+        model_data = _drop_model_missing(work, [outcome, "treated", "post", "county_fips", "year", "pair_id", cluster])
         model = smf.ols(
             f"{outcome} ~ treated:post + C(county_fips) + C(year) + C(pair_id)",
-            data=work,
-        ).fit(cov_type="cluster", cov_kwds={"groups": work[cluster]})
+            data=model_data,
+        ).fit(cov_type="cluster", cov_kwds={"groups": model_data[cluster]})
         term = "treated:post"
         rows.append(
             {
@@ -92,10 +97,11 @@ def estimate_bite_dose_response(df: pd.DataFrame, cluster: str = "state") -> pd.
     work["post_x_bite"] = work["post"] * work["policy_dose"]
     rows = []
     for outcome in ["log_employment", "log_establishments", "log_emp_per_establishment", "log_avg_annual_pay"]:
+        model_data = _drop_model_missing(work, [outcome, "post_x_bite", "county_fips", "year", "pair_id", cluster])
         model = smf.ols(
             f"{outcome} ~ post_x_bite + C(county_fips) + C(year) + C(pair_id)",
-            data=work,
-        ).fit(cov_type="cluster", cov_kwds={"groups": work[cluster]})
+            data=model_data,
+        ).fit(cov_type="cluster", cov_kwds={"groups": model_data[cluster]})
         rows.append(
             {
                 "outcome": outcome,
@@ -103,7 +109,7 @@ def estimate_bite_dose_response(df: pd.DataFrame, cluster: str = "state") -> pd.
                 "estimate": model.params.get("post_x_bite", np.nan),
                 "std_error": model.bse.get("post_x_bite", np.nan),
                 "p_value": model.pvalues.get("post_x_bite", np.nan),
-                "mean_treated_bite": work.loc[work["treated"].eq(1), "minimum_wage_bite"].mean(),
+                "mean_treated_bite": model_data.loc[model_data["treated"].eq(1), "minimum_wage_bite"].mean(),
                 "nobs": int(model.nobs),
             }
         )
@@ -118,10 +124,14 @@ def estimate_heterogeneity(df: pd.DataFrame, cluster: str = "state") -> pd.DataF
         work[f"treated_post_x_{hetero}"] = work["treated"] * work["post"] * work[hetero]
         for outcome in ["log_employment", "log_establishments", "log_emp_per_establishment", "log_avg_annual_pay"]:
             term = f"treated_post_x_{hetero}"
+            model_data = _drop_model_missing(
+                work,
+                [outcome, "treated", "post", term, "county_fips", "year", "pair_id", cluster],
+            )
             model = smf.ols(
                 f"{outcome} ~ treated:post + {term} + C(county_fips) + C(year) + C(pair_id)",
-                data=work,
-            ).fit(cov_type="cluster", cov_kwds={"groups": work[cluster]})
+                data=model_data,
+            ).fit(cov_type="cluster", cov_kwds={"groups": model_data[cluster]})
             rows.append(
                 {
                     "outcome": outcome,
@@ -178,28 +188,47 @@ def specification_curve(df: pd.DataFrame, cluster: str = "state") -> pd.DataFram
     for outcome in outcomes:
         for window_name, frame in windows.items():
             for weighted in [False, True]:
+                required = [outcome, "treated", "post", "county_fips", "year", "pair_id", cluster]
+                if weighted:
+                    required.append("baseline_employment" if "baseline_employment" in frame.columns else "employment")
+                model_data = _drop_model_missing(frame, required)
                 kwargs = {}
                 if weighted:
-                    kwargs["weights"] = frame["baseline_employment"] if "baseline_employment" in frame.columns else frame["employment"]
+                    kwargs["weights"] = model_data["baseline_employment"] if "baseline_employment" in model_data.columns else model_data["employment"]
                     fit = smf.wls
                 else:
                     fit = smf.ols
-                model = fit(
-                    f"{outcome} ~ treated:post + C(county_fips) + C(year) + C(pair_id)",
-                    data=frame,
-                    **kwargs,
-                ).fit(cov_type="cluster", cov_kwds={"groups": frame[cluster]})
-                rows.append(
-                    {
-                        "outcome": outcome,
-                        "window": window_name,
-                        "weighted": weighted,
-                        "estimate": model.params.get("treated:post", np.nan),
-                        "std_error": model.bse.get("treated:post", np.nan),
-                        "p_value": model.pvalues.get("treated:post", np.nan),
-                        "nobs": int(model.nobs),
-                    }
-                )
+                try:
+                    model = fit(
+                        f"{outcome} ~ treated:post + C(county_fips) + C(year) + C(pair_id)",
+                        data=model_data,
+                        **kwargs,
+                    ).fit(cov_type="cluster", cov_kwds={"groups": model_data[cluster]})
+                    rows.append(
+                        {
+                            "outcome": outcome,
+                            "window": window_name,
+                            "weighted": weighted,
+                            "estimate": model.params.get("treated:post", np.nan),
+                            "std_error": model.bse.get("treated:post", np.nan),
+                            "p_value": model.pvalues.get("treated:post", np.nan),
+                            "nobs": int(model.nobs),
+                            "status": "ok",
+                        }
+                    )
+                except Exception as exc:
+                    rows.append(
+                        {
+                            "outcome": outcome,
+                            "window": window_name,
+                            "weighted": weighted,
+                            "estimate": np.nan,
+                            "std_error": np.nan,
+                            "p_value": np.nan,
+                            "nobs": len(model_data),
+                            "status": f"failed: {exc}",
+                        }
+                    )
     return pd.DataFrame(rows)
 
 

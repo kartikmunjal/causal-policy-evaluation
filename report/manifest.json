@@ -1,12 +1,12 @@
 {
-  "created_at_utc": "2026-06-07T22:06:35.343110+00:00",
+  "created_at_utc": "2026-06-17T02:18:27.741403+00:00",
   "python": "3.11.14",
   "platform": "macOS-14.4-arm64-arm-64bit",
   "files": [
     {
       "path": "README.md",
-      "sha256": "bef793974624f9fd3c754f508a065f1d0124a72732f77bb9f4bb3e03ace64aa6",
-      "bytes": 8448
+      "sha256": "b999fef2494ed5dec3be512cc697b5a339d8170634313037cf94e672fef2cb3c",
+      "bytes": 10467
     },
     {
       "path": "data/raw/.gitkeep",
@@ -14,14 +14,24 @@
       "bytes": 0
     },
     {
+      "path": "data/raw/county_adjacency2024.txt",
+      "sha256": "912ca408163016864fe64aaf667b53ad03a19ce4acbc586d3ac508395bdac980",
+      "bytes": 1116030
+    },
+    {
       "path": "data/raw/minimum_wage_policy_dates.csv",
-      "sha256": "2abaa48a5d60ddf4a66ef36379917b7139ff53a81a133bc6ec7fb8384ba7da09",
-      "bytes": 628
+      "sha256": "16e036394dbb1c3e6c7e2f828b8f93ab43f34ad660956cce4ca23269b84518fb",
+      "bytes": 53534
     },
     {
       "path": "data/raw/provenance.json",
       "sha256": "5b9b2121d306727c2b7677536952f963fc2203e470d45bf6f8a33c0aba421bcf",
       "bytes": 617
+    },
+    {
+      "path": "data/raw/state_minimum_wage_annual.csv",
+      "sha256": "20e4fd5e64c28c47bc0a67bace45aabef1e8efa096c0ada62cf5f93a84a645a0",
+      "bytes": 35625
     },
     {
       "path": "report/PHASE_1_BASELINE.md",
@@ -37,6 +47,11 @@
       "path": "report/PHASE_3_ECONOMIC_EXTENSIONS.md",
       "sha256": "7bd7d0450be6d407019ad81531d0d0a369e19ee7a1e06a3dac7870b3cd24ee88",
       "bytes": 1119
+    },
+    {
+      "path": "report/PHASE_4_NATIONAL_PANEL.md",
+      "sha256": "5a78670ac36ec995297aec26cd51ec0eb1371b10872a3b10c8906f78166a57ed",
+      "bytes": 1874
     },
     {
       "path": "report/WRITEUP.md",
@@ -84,6 +99,76 @@
       "bytes": 105
     },
     {
+      "path": "report/national_balance_table.csv",
+      "sha256": "d4669fe8a35338819775bb1f0fade3413302f5ec5cc6330ac905e142e7e9c4a1",
+      "bytes": 336
+    },
+    {
+      "path": "report/national_bite_dose_response.csv",
+      "sha256": "0b9b339bb28658a09b5a571b665d02de3d5544c72655b39e71c8d8e6ddfe92a6",
+      "bytes": 384
+    },
+    {
+      "path": "report/national_cluster_diagnostics.csv",
+      "sha256": "35ed9a32d5701c21b862340c4379c1a46bbb782ff903adcc6c379aa9a299f9bd",
+      "bytes": 42
+    },
+    {
+      "path": "report/national_event_study.png",
+      "sha256": "64d0dbcfdc127b2f4710bf5e3c7a3a99389b27a3acac7ac8a37f618071677357",
+      "bytes": 50721
+    },
+    {
+      "path": "report/national_event_study_coefficients.csv",
+      "sha256": "41ba036fb807d6ff4284e97189af26f10fd11f7f8aad497f36535bcf7afc723b",
+      "bytes": 527
+    },
+    {
+      "path": "report/national_heterogeneity.csv",
+      "sha256": "68cf72a24b921bae0ada549c3bd55186e5c31de75bc01538dbf76e62282bc505",
+      "bytes": 1084
+    },
+    {
+      "path": "report/national_joint_pretrend_test.csv",
+      "sha256": "0df633d96f9d10d3a9344d1d13dcfd8827b2dfb40a85df4a396365019a2bbd37",
+      "bytes": 102
+    },
+    {
+      "path": "report/national_margin_decomposition.csv",
+      "sha256": "1d405ca8fa36b41f8e91ed5e8de3b2259adc1a5e4004eb6563f0a62d011ca871",
+      "bytes": 519
+    },
+    {
+      "path": "report/national_parallel_trends_preperiod.csv",
+      "sha256": "497d417ce54b597edda87947c073b553c898c915aa9f889049406ca3ed515cee",
+      "bytes": 275
+    },
+    {
+      "path": "report/national_pyfixest_lpdid.csv",
+      "sha256": "b85f03ee5962389565db7d6c249c510616cf3a1513bf78f9016c429a5c0678f3",
+      "bytes": 219
+    },
+    {
+      "path": "report/national_raw_trends.csv",
+      "sha256": "5052b06a057a2b5265afadc07c43582a79964798d16be84a4f777715c40dd72a",
+      "bytes": 655
+    },
+    {
+      "path": "report/national_specification_curve.csv",
+      "sha256": "acd22413e61806952345176216dab3bdb033079f131d0c90b9e4708a125256d7",
+      "bytes": 2326
+    },
+    {
+      "path": "report/national_specification_curve.png",
+      "sha256": "ae75591c04783742b04305d32458ab5ea65d3cfc33a911facb2a9a6adfbf37a7",
+      "bytes": 62249
+    },
+    {
+      "path": "report/national_spillover_identification.csv",
+      "sha256": "662b71f317b74c766666870b59a50f20857232ff536f6136455f94f80f55ec0b",
+      "bytes": 205
+    },
+    {
       "path": "report/parallel_trends_preperiod.csv",
       "sha256": "c247d3efbb2328781f83b84290231193e3ac7523cd470b81fe9850aa8b08dea5",
       "bytes": 208
@@ -124,9 +209,14 @@
       "bytes": 170
     },
     {
+      "path": "report/policy_fred_missing_states.txt",
+      "sha256": "551a4452dec9eb3e10e5dc46dfd12569ee0f51d8bcc4c76a32d598929c0eb314",
+      "bytes": 15
+    },
+    {
       "path": "report/policy_validation.csv",
-      "sha256": "7536013811bb54bb0f932c96190c8a19c4377edf4f06937d2f3d903bc8e86a7b",
-      "bytes": 45
+      "sha256": "5d26800d2b6e290dcc6d7df5649fc37ada63931743f6d98cf7486c14576729fa",
+      "bytes": 2857
     },
     {
       "path": "report/pyfixest_lpdid.csv",
@@ -175,13 +265,18 @@
     },
     {
       "path": "scripts/build_national_panel.py",
-      "sha256": "ffb25ecf3b7755e073948b12435e71da62052b30078d7b9ff6a5f370366fc604",
-      "bytes": 1793
+      "sha256": "a3b312a1029d6a5f52de401d33afa3e19c6efe93ab51376a0517cbaf2c090e38",
+      "bytes": 2191
     },
     {
       "path": "scripts/fetch_data.py",
       "sha256": "4ffb974611284e5a712aeff2c2407d265e7680731724c49bcac289a309ef6905",
       "bytes": 1174
+    },
+    {
+      "path": "scripts/fetch_policy_fred.py",
+      "sha256": "bb0052d39dea5056077314b05827009fa6934c487ccfc4e77c6c1fbce7e70b95",
+      "bytes": 2504
     },
     {
       "path": "scripts/render_report.py",
@@ -214,6 +309,11 @@
       "bytes": 990
     },
     {
+      "path": "scripts/run_national_findings.py",
+      "sha256": "eb0c048ae466a7e3f3485f583ea95b170aafbfc19919fe312b8f66db5b396071",
+      "bytes": 3298
+    },
+    {
       "path": "scripts/run_research_extensions.py",
       "sha256": "58d8997708130fa374ff3c06f6b2872d2d27a6dcecd10a36b04809b74799f2d1",
       "bytes": 1687
@@ -240,8 +340,8 @@
     },
     {
       "path": "src/causal_policy_evaluation/data.py",
-      "sha256": "114ea7475908b0fa8eee325582ef991eef8bc9035df4dfc46fdac4d2e5ca609d",
-      "bytes": 9895
+      "sha256": "f77bf43354d94277bffe4268c3612e99607886bde9ae1a6204257aa1b4092fd3",
+      "bytes": 9925
     },
     {
       "path": "src/causal_policy_evaluation/diagnostics.py",
@@ -255,13 +355,13 @@
     },
     {
       "path": "src/causal_policy_evaluation/economics.py",
-      "sha256": "785280280ab7f0777eb3ca87cc5ad034daa4c91e021d89c8a5d91eeb465912ff",
-      "bytes": 9471
+      "sha256": "5b56d0f2a7a5ededceccff292f4c98505c18d225ee0247079e1f4ce4d40d9cf2",
+      "bytes": 11096
     },
     {
       "path": "src/causal_policy_evaluation/geography.py",
-      "sha256": "0fefee61a5815b5da59f9db5d07a10ae81eb8ae5d679638da3d5f6d32319f049",
-      "bytes": 3647
+      "sha256": "48462b3c24a88e8187bf5717cfb4d743b44b1153b715a4fc6a11e83985d045ab",
+      "bytes": 4197
     },
     {
       "path": "src/causal_policy_evaluation/inference.py",
@@ -272,6 +372,11 @@
       "path": "src/causal_policy_evaluation/iv.py",
       "sha256": "ad0898a3fb4a84d5d5f0890a6164f4ebfd2f9d89518e901f21cfb074c109ffa1",
       "bytes": 2527
+    },
+    {
+      "path": "src/causal_policy_evaluation/minimum_wage.py",
+      "sha256": "2a0172a0fbdf9822a37c1e8cb00fe0a79d86f205e0bf80ea9e303fb0f1e8a793",
+      "bytes": 6428
     },
     {
       "path": "src/causal_policy_evaluation/plots.py",
@@ -290,8 +395,8 @@
     },
     {
       "path": "src/causal_policy_evaluation/reproducibility.py",
-      "sha256": "e7a6befdc01276143077011cd8183543c2b979f39718e78293cd2635c9eeef66",
-      "bytes": 1726
+      "sha256": "21b1c90ddef07151304d352a62af94bd9cdde3d881967b3781462db528082f9f",
+      "bytes": 1795
     },
     {
       "path": "src/causal_policy_evaluation/synthetic_control.py",
@@ -300,8 +405,8 @@
     },
     {
       "path": "tests/test_smoke_pipeline.py",
-      "sha256": "670e756540cc473949bfa92f4cbcac5c1957fa4267273496f3c6218787850291",
-      "bytes": 3637
+      "sha256": "3001430a353a1a1b4c9d3e560b41f71253247e584c41c1dacf45ce021f3d940a",
+      "bytes": 4422
     }
   ]
 }

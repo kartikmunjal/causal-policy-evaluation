@@ -1,0 +1,4 @@
+term,relative_year,estimate,std_error,p_value,ci_low,ci_high,passes_10pct_screen
+event_m4,-4,0.04076919920962656,1.3836945520464983,0.9764945170909537,-2.67127212280151,2.752810521220763,True
+event_m3,-3,0.0699821983691455,,,,,False
+event_m2,-2,0.08908144655911578,,,,,False

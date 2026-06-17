@@ -1,0 +1,2 @@
+test,identified,reason
+control_side_border_spillover,False,Validation panel contains only border controls exposed to the neighboring treated state; add interior or unexposed border controls for this test.

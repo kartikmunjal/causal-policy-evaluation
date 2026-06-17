@@ -155,7 +155,8 @@ def build_nj_pa_border_panel(qcew: pd.DataFrame) -> pd.DataFrame:
 def write_policy_table(raw_dir: Path) -> Path:
     raw_dir.mkdir(parents=True, exist_ok=True)
     path = raw_dir / "minimum_wage_policy_dates.csv"
-    write_policy_seed(path)
+    if not path.exists():
+        write_policy_seed(path)
     return path
 
 

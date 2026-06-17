@@ -1,0 +1,5 @@
+outcome,term,estimate,std_error,p_value,mean_treated_bite,nobs
+log_employment,post_x_bite,0.0013626885532024178,,,1.1762827706218553,21315
+log_establishments,post_x_bite,-0.0036542203048074767,,,1.1762827706218553,21301
+log_emp_per_establishment,post_x_bite,0.05999857413616649,,,1.1762827706218553,21301
+log_avg_annual_pay,post_x_bite,-0.00748435645513971,,,1.1762827706218553,19323

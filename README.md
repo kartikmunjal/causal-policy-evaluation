@@ -36,6 +36,10 @@ Phase 3 is the economics and data-science contribution layer. It asks whether th
 
 See `report/PHASE_3_ECONOMIC_EXTENSIONS.md`.
 
+Phase 4 moves the project from validation to a true national research sample. It fetches state minimum-wage time series from FRED/DOL, detects actual policy increases, and writes a verified cohort table that can feed the national Census border-county panel.
+
+Phase 4 current national outputs are summarized in `report/PHASE_4_NATIONAL_PANEL.md`.
+
 ## Identifying Assumptions
 
 Treated and control border counties must have parallel counterfactual employment trends absent the policy change. Border counties should share local economic shocks, and the treatment should not cause large cross-border spillovers that contaminate controls. Policy timing should not be driven by county-specific food-service labor-market shocks.
@@ -50,7 +54,7 @@ Free public data sources:
 - DOL/state minimum-wage histories for policy dates, cached in `data/raw/minimum_wage_policy_dates.csv`.
 - Census county adjacency for cross-state border-pair construction.
 
-Fetch scripts cache raw files under `data/raw/` and write provenance metadata with fetch date, vintage, URL, and cleaning notes. API keys, if used for FRED or Census endpoints, should be supplied as environment variables such as `FRED_API_KEY` and `CENSUS_API_KEY`.
+Fetch scripts cache raw files under `data/raw/` and write provenance metadata with fetch date, vintage, URL, and cleaning notes. The FRED minimum-wage fetch uses public CSV graph endpoints and does not require an API key. Other FRED or Census endpoints, if added later, should use environment variables such as `FRED_API_KEY` and `CENSUS_API_KEY`.
 
 ## Results
 
@@ -69,6 +73,19 @@ Current validation snapshot from the cached 2015-2023 BLS QCEW NJ/PA border-coun
 - Border-spillover test: not identified in the current validation panel because there are no interior or unexposed comparison controls.
 
 These are validation findings, not final national estimates. The two-state NJ/PA panel is useful for surfacing mechanisms and checking code, but publishable inference requires the audited national panel with enough state clusters.
+
+Current national snapshot using FRED/DOL policy timing, Census county adjacency, and cached 2015-2023 BLS QCEW data:
+
+- Policy input: 210 FRED/DOL state minimum-wage increases; 414 state-year minimum-wage-rate rows.
+- Missing FRED state series recorded for AL, LA, MS, SC, and TN.
+- Border design input: 1,306 Census cross-state border-county pairs.
+- National panel: 23,219 border-county-pair-year rows.
+- Cluster count: 48 states; state-cluster warning is false.
+- National event-study estimates: -4 lead 0.0408; -3 lead 0.0700; -2 lead 0.0891; event year 0 0.0575; +1 -0.1016; +2 -0.0835; +3 -0.0160.
+- National pyfixest LPDID estimate: 0.0741 log points, SE 0.0738, p = 0.325.
+- National margin decomposition: employment -0.0649, establishments -0.0049, employment per establishment -0.2202, average annual pay 0.0199 log points.
+- National bite/dose-response estimates: employment 0.0014, employment per establishment 0.0600, average annual pay -0.0075.
+- Several state-clustered SEs remain unstable or undefined in high-dimensional specs; the report preserves those missing SEs rather than manufacturing precision.
 
 Required outputs:
 
@@ -92,6 +109,11 @@ Required outputs:
 - `report/phase2_spillover_identification.csv`
 - `report/phase2_specification_curve.csv`
 - `report/phase2_specification_curve.png`
+- `report/national_event_study_coefficients.csv`
+- `report/national_pyfixest_lpdid.csv`
+- `report/national_margin_decomposition.csv`
+- `report/national_bite_dose_response.csv`
+- `report/national_specification_curve.png`
 
 ## Robustness Summary
 
@@ -121,12 +143,14 @@ PYTHONPATH=src .venv/bin/python scripts/render_report.py
 National scale-up:
 
 ```bash
+PYTHONPATH=src .venv/bin/python scripts/fetch_policy_fred.py --start-year 2015 --end-year 2023
 PYTHONPATH=src .venv/bin/python scripts/build_border_pairs.py
 PYTHONPATH=src .venv/bin/python scripts/validate_policy_table.py
 PYTHONPATH=src .venv/bin/python scripts/build_national_panel.py --start-year 2015 --end-year 2023
 PYTHONPATH=src .venv/bin/python scripts/run_event_study.py --panel data/processed/national_border_qcew_food_service_panel.parquet
 PYTHONPATH=src .venv/bin/python scripts/run_did.py --panel data/processed/national_border_qcew_food_service_panel.parquet
 PYTHONPATH=src .venv/bin/python scripts/run_diagnostics.py --panel data/processed/national_border_qcew_food_service_panel.parquet
+PYTHONPATH=src .venv/bin/python scripts/run_national_findings.py
 ```
 
 Offline smoke check:
@@ -144,6 +168,8 @@ Make targets:
 ```bash
 make smoke PYTHON=.venv/bin/python
 make validation PYTHON=.venv/bin/python
+make fred-policy PYTHON=.venv/bin/python
+make national-findings PYTHON=.venv/bin/python
 make test PYTHON=.venv/bin/python
 ```
 
