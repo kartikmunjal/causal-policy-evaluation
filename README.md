@@ -40,6 +40,12 @@ Phase 4 moves the project from validation to a true national research sample. It
 
 Phase 4 current national outputs are summarized in `report/PHASE_4_NATIONAL_PANEL.md`.
 
+Phase 5 adds a connected labor-demand research design: a China-shock shift-share IV at the commuting-zone level. It maps HS6 trade flows to NAICS industries, combines them with baseline QCEW industry employment shares, instruments US import exposure with import growth to other high-income countries, reports first-stage strength, and writes Rotemberg-style industry influence weights. See `report/PHASE_5_TRADE_SHIFT_SHARE.md`.
+
+Phase 6 adds a spatial RDD robustness scaffold for state-border policy jumps. It requires a documented `signed_distance_km` running variable from public geometry and refuses to manufacture a discontinuity from treatment status. See `report/PHASE_6_SPATIAL_RDD.md`.
+
+A price-index construction project is best kept as a standalone follow-on repo because it is a measurement contribution, not a direct causal estimate in this minimum-wage border design.
+
 ## Identifying Assumptions
 
 Treated and control border counties must have parallel counterfactual employment trends absent the policy change. Border counties should share local economic shocks, and the treatment should not cause large cross-border spillovers that contaminate controls. Policy timing should not be driven by county-specific food-service labor-market shocks.
@@ -53,6 +59,8 @@ Free public data sources:
 - Census ACS for baseline industry shares in the shift-share IV design.
 - DOL/state minimum-wage histories for policy dates, cached in `data/raw/minimum_wage_policy_dates.csv`.
 - Census county adjacency for cross-state border-pair construction.
+- Trade-shock extension inputs: public import data by HS6/year, Pierce-Schott style HS-to-NAICS concordances, and Dorn commuting-zone crosswalks.
+- Spatial RDD extension inputs: public county geometry and border-distance construction with signed distance to the relevant state border.
 
 Fetch scripts cache raw files under `data/raw/` and write provenance metadata with fetch date, vintage, URL, and cleaning notes. The FRED minimum-wage fetch uses public CSV graph endpoints and does not require an API key. Other FRED or Census endpoints, if added later, should use environment variables such as `FRED_API_KEY` and `CENSUS_API_KEY`.
 
@@ -114,10 +122,20 @@ Required outputs:
 - `report/national_margin_decomposition.csv`
 - `report/national_bite_dose_response.csv`
 - `report/national_specification_curve.png`
+- `report/shift_share_iv.csv`
+- `report/shift_share_first_stage.txt`
+- `report/shift_share_rotemberg_weights.csv`
+- `report/shift_share_dropped_us_hs6.csv`
+- `report/shift_share_dropped_instrument_hs6.csv`
+- `report/spatial_rdd_estimates.csv`
+- `report/spatial_rdd_diagnostics.csv`
+- `report/spatial_rdd_identification_notes.csv`
 
 ## Robustness Summary
 
 The robustness plan includes synthetic control for the treated county path, donor weights, placebo/permutation inference, placebo policy years, joint pre-trend tests, wild-cluster bootstrap diagnostics, leave-one-state-out hooks, and raw-trend/balance tables. The secondary IV design constructs a Bartik-style shift-share instrument for local labor demand and estimates 2SLS with `linearmodels`, reporting first-stage strength.
+
+The trade-shock extension adds concordance-loss audits and Rotemberg-style industry influence weights so the identifying variation can be inspected. The spatial RDD extension is a robustness check only and requires a real signed distance-to-border variable.
 
 RDD is skipped unless a genuine sharp public-data eligibility threshold is identified. No discontinuity is fabricated.
 
@@ -153,6 +171,28 @@ PYTHONPATH=src .venv/bin/python scripts/run_diagnostics.py --panel data/processe
 PYTHONPATH=src .venv/bin/python scripts/run_national_findings.py
 ```
 
+Trade-shock shift-share extension, from prepared public inputs:
+
+```bash
+PYTHONPATH=src .venv/bin/python scripts/run_shift_share.py \
+  --us-imports data/raw/us_china_imports_hs6.csv \
+  --instrument-trade data/raw/adh_country_china_imports_hs6.csv \
+  --crosswalk data/raw/hs6_naics_crosswalk.csv \
+  --qcew-industry data/processed/qcew_county_industry_panel.parquet \
+  --county-to-cz data/raw/county_to_commuting_zone.csv \
+  --start-year 1991 \
+  --end-year 2007
+```
+
+Spatial RDD robustness, from a prepared public-geometry distance panel:
+
+```bash
+PYTHONPATH=src .venv/bin/python scripts/run_spatial_rdd.py \
+  --panel data/processed/spatial_border_distance_panel.parquet \
+  --outcome log_employment \
+  --running-col signed_distance_km
+```
+
 Offline smoke check:
 
 ```bash
@@ -170,6 +210,8 @@ make smoke PYTHON=.venv/bin/python
 make validation PYTHON=.venv/bin/python
 make fred-policy PYTHON=.venv/bin/python
 make national-findings PYTHON=.venv/bin/python
+make shift-share PYTHON=.venv/bin/python
+make spatial-rdd PYTHON=.venv/bin/python
 make test PYTHON=.venv/bin/python
 ```
 

@@ -18,6 +18,16 @@ from causal_policy_evaluation.inference import cluster_count, joint_pretrend_tes
 from causal_policy_evaluation.minimum_wage import detect_minimum_wage_changes, fred_series_id
 from causal_policy_evaluation.plots import plot_event_study
 from causal_policy_evaluation.policy import policy_seed, validate_policy_table
+from causal_policy_evaluation.rdd import density_balance_diagnostics, run_local_linear_rdd
+from causal_policy_evaluation.shift_share import (
+    aggregate_trade_to_naics,
+    build_cz_industry_shares,
+    build_trade_exposure,
+    cz_outcome_changes,
+    industry_trade_shocks,
+    rotemberg_weights,
+    run_shift_share_iv,
+)
 from causal_policy_evaluation.synthetic_control import fit_simple_synth, placebo_permutation_gaps
 
 
@@ -107,3 +117,76 @@ def test_fred_minimum_wage_change_detection():
     assert fred_series_id("NJ") == "STTMINWGNJ"
     assert len(changes) == 2
     assert set(changes["policy_year"]) == {2019, 2020}
+
+
+def test_shift_share_trade_iv_components_smoke():
+    crosswalk = pd.DataFrame(
+        {
+            "hs6": ["000001", "000002"],
+            "naics": ["311", "722"],
+            "share": [1.0, 1.0],
+        }
+    )
+    us_trade = pd.DataFrame(
+        {
+            "year": [1991, 1991, 2007, 2007],
+            "hs6": ["1", "2", "1", "2"],
+            "trade_value": [100.0, 50.0, 180.0, 90.0],
+        }
+    )
+    inst_trade = pd.DataFrame(
+        {
+            "year": [1991, 1991, 2007, 2007],
+            "hs6": ["1", "2", "1", "2"],
+            "trade_value": [80.0, 60.0, 160.0, 120.0],
+        }
+    )
+    qcew_rows = []
+    county_rows = []
+    for cz in range(1, 7):
+        county = f"0100{cz}"
+        county_rows.append({"county_fips": county, "cz": cz})
+        for year in [1991, 2007]:
+            for naics, base in [("311", 100 + 10 * cz), ("722", 60 + 4 * cz)]:
+                qcew_rows.append(
+                    {
+                        "county_fips": county,
+                        "cz": cz,
+                        "year": year,
+                        "naics": naics,
+                        "employment": base + (year == 2007) * (5 * cz),
+                        "wages": 1000 * base + (year == 2007) * (50 * cz),
+                    }
+                )
+    qcew = pd.DataFrame(qcew_rows)
+    county_to_cz = pd.DataFrame(county_rows)
+    us_naics, dropped = aggregate_trade_to_naics(us_trade, crosswalk)
+    inst_naics, _ = aggregate_trade_to_naics(inst_trade, crosswalk)
+    china_shocks = industry_trade_shocks(us_naics, 1991, 2007, prefix="china_import")
+    inst_shocks = industry_trade_shocks(inst_naics, 1991, 2007, prefix="adh_import")
+    shares = build_cz_industry_shares(qcew, county_to_cz, 1991)
+    exposure = build_trade_exposure(shares, china_shocks, inst_shocks)
+    outcomes = cz_outcome_changes(qcew, county_to_cz, 1991, 2007)
+    analysis = outcomes.merge(exposure, on="cz")
+    iv_table, first_stage = run_shift_share_iv(analysis)
+    weights = rotemberg_weights(shares, inst_shocks)
+    assert dropped.empty
+    assert len(exposure) == 6
+    assert not iv_table.empty
+    assert "Partial F-statistic" in first_stage
+    assert abs(weights["rotemberg_weight_abs"].sum() - 1.0) < 1e-9
+
+
+def test_spatial_rdd_requires_real_signed_distance_and_estimates():
+    df = pd.DataFrame(
+        {
+            "signed_distance_km": [-6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6],
+            "log_employment": [10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.9, 11.0, 11.1, 11.2, 11.3, 11.4],
+            "state": ["A"] * 6 + ["B"] * 6,
+        }
+    )
+    estimate = run_local_linear_rdd(df, outcome="log_employment", bandwidth=6.1)
+    diagnostics = density_balance_diagnostics(df, bandwidth=6.1)
+    assert estimate.nobs == 12
+    assert estimate.estimate > 0
+    assert diagnostics.loc[0, "left_n"] == 6
