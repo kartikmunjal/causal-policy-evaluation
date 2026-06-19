@@ -1,5 +1,5 @@
 outcome,term,specification,estimate,std_error,p_value,nobs,covariance,status
-log_employment,treated:post,lagged_regional_cycle_controls,0.004595218369713272,,,4464,clustered_state,ok
-log_establishments,treated:post,lagged_regional_cycle_controls,-0.07953748951712973,5.664285917279847,0.9887965313968347,4460,clustered_state,ok
-log_emp_per_establishment,treated:post,lagged_regional_cycle_controls,-0.2640906147004344,3564.818973156814,0.9999408907365237,4460,clustered_state,ok
-log_avg_annual_pay,treated:post,lagged_regional_cycle_controls,0.033057679492745504,44.193952929621936,0.9994031715229107,3995,clustered_state,ok
+log_employment,treated:post,lagged_regional_cycle_controls,-0.0911685934066687,,,20634,clustered_state,ok
+log_establishments,treated:post,lagged_regional_cycle_controls,-0.004179319169941862,1.8540648406365665,0.9982014591165644,20613,clustered_state,ok
+log_emp_per_establishment,treated:post,lagged_regional_cycle_controls,-0.3485724402321756,4.455976649594379,0.937648421249689,20613,clustered_state,ok
+log_avg_annual_pay,treated:post,lagged_regional_cycle_controls,0.020668875266682686,2.012495807410607,0.9918056542059949,17150,clustered_state,ok

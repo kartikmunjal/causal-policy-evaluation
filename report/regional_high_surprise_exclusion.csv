@@ -1,5 +1,5 @@
 outcome,term,specification,excluded_threshold,estimate,std_error,p_value,nobs,covariance,status
-log_employment,treated:post,exclude_abs_lag_surprise_above_p75,4.126898636059006,0.24940381931324357,3163.0599247618115,0.9999370876741628,2121,clustered_state,ok
-log_establishments,treated:post,exclude_abs_lag_surprise_above_p75,4.126898636059006,-0.05903100838405808,212.23820096827964,0.9997780798679214,2119,clustered_state,ok
-log_emp_per_establishment,treated:post,exclude_abs_lag_surprise_above_p75,4.126898636059006,0.8923165882267481,,,2119,clustered_state,ok
-log_avg_annual_pay,treated:post,exclude_abs_lag_surprise_above_p75,4.126898636059006,0.04572272677402395,,,1883,clustered_state,ok
+log_employment,treated:post,exclude_abs_lag_surprise_above_p75,3.38105473252881,-0.233684339120215,,,9670,clustered_state,ok
+log_establishments,treated:post,exclude_abs_lag_surprise_above_p75,3.38105473252881,-0.013976022408843193,,,9661,clustered_state,ok
+log_emp_per_establishment,treated:post,exclude_abs_lag_surprise_above_p75,3.38105473252881,-0.8962851350652864,,,9661,clustered_state,ok
+log_avg_annual_pay,treated:post,exclude_abs_lag_surprise_above_p75,3.38105473252881,0.04473673215857199,12.210405065723812,0.9970767007450142,8055,clustered_state,ok

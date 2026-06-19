@@ -100,12 +100,12 @@ Current national snapshot using FRED/DOL policy timing, Census county adjacency,
 
 Regional-cycle bridge snapshot using verified live controls from `regional-activity-nowcast`:
 
-- Matched rows: 5,021 of 23,219 national panel rows across 10 states.
-- Treated-row coverage: 23.9%; control-row coverage: 18.9%.
-- Lagged regional-cycle controlled employment estimate: 0.0046 log points on 4,464 matched rows.
-- Lagged activity-surprise interaction for employment: -0.0036, with unstable clustered precision.
-- Dropping high absolute lagged-surprise state-years gives an employment estimate of 0.2494, also with unstable precision.
-- Interpretation: the live macro-control bridge is operational, but current 10-state coverage is too narrow for a definitive national causal claim.
+- Matched rows: 23,219 of 23,219 national panel rows across all 48 states/DC in the panel.
+- Treated-row coverage: 100%; control-row coverage: 100%.
+- Lagged regional-cycle controlled employment estimate: -0.0912 log points on 20,634 rows.
+- Lagged activity-surprise interaction for employment: 0.0008, with unstable clustered precision.
+- Dropping high absolute lagged-surprise state-years gives an employment estimate of -0.2337, also with unstable precision.
+- Interpretation: the live macro-control bridge now has full panel coverage, but the high-dimensional clustered specs remain imprecise and should be treated as robustness evidence rather than the headline estimate.
 
 Required outputs:
 

@@ -20,12 +20,12 @@ These are robustness and heterogeneity checks, not the primary estimator. The he
 
 ## Interpretation
 
-The live regional nowcast pilot currently covers 10 states. Coverage is therefore partial relative to the full national policy panel. The coverage table must be read before interpreting estimates. Any matched-state result should be described as a live-control pilot robustness check, not as a replacement for the full national estimate.
+The live regional nowcast bridge now covers the 48 states/DC used by the national causal-policy panel. The coverage table should still be read before interpreting estimates, especially because some precision estimates remain unstable in high-dimensional clustered specifications.
 
 ## Current Run
 
-Using the verified `regional-activity-nowcast` export, the merge matches 5,021 of 23,219 national panel rows, covering 10 of 48 states. Treated-row coverage is 23.9 percent and control-row coverage is 18.9 percent.
+Using the verified `regional-activity-nowcast` export, the merge matches 23,219 of 23,219 national panel rows, covering all 48 states/DC in the national panel. Treated-row and control-row coverage are both 100 percent.
 
-The lagged regional-cycle controlled employment estimate is 0.0046 log points on 4,464 matched rows. Several clustered standard errors are unstable or undefined in the matched-state subset, so these outputs should be read as a pilot robustness screen rather than a definitive national estimate.
+The lagged regional-cycle controlled employment estimate is -0.0912 log points on 20,634 rows. Several clustered standard errors are unstable or undefined, so these outputs should be read as robustness evidence rather than a standalone definitive estimate.
 
-The lagged activity-surprise interaction for employment is -0.0036 with a very large clustered standard error. Dropping the highest absolute lagged-surprise state-years produces an employment estimate of 0.2494, again with unstable precision. The honest takeaway is not a strong new causal finding; it is that the live macro-control bridge is operational and exposes where broader state coverage is needed.
+The lagged activity-surprise interaction for employment is 0.0008 with undefined clustered precision. Dropping the highest absolute lagged-surprise state-years produces an employment estimate of -0.2337, again with unstable precision. The honest takeaway is not a strong new causal finding; it is that full-state live macro controls are now operational and the estimates remain sensitive enough to require careful robustness interpretation.
