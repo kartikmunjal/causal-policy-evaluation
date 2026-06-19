@@ -1,12 +1,12 @@
 {
-  "created_at_utc": "2026-06-17T22:43:30.513121+00:00",
+  "created_at_utc": "2026-06-19T01:41:06.483925+00:00",
   "python": "3.11.14",
   "platform": "macOS-14.4-arm64-arm-64bit",
   "files": [
     {
       "path": "README.md",
-      "sha256": "09827b422f1676dc83caecbbe5a8d5f63581b1b8cf39becc272aef091dc77048",
-      "bytes": 13054
+      "sha256": "06601cfbae5622a9fe8941519c0a826b91c5104607e48d1de94773389d12780e",
+      "bytes": 14990
     },
     {
       "path": "data/raw/.gitkeep",
@@ -62,6 +62,11 @@
       "path": "report/PHASE_6_SPATIAL_RDD.md",
       "sha256": "9473a199cfd3acf5e11cb1e967fd7af924ba5993bc660e0fc10513095e1bbc02",
       "bytes": 1954
+    },
+    {
+      "path": "report/PHASE_7_REGIONAL_CYCLE_CONTROLS.md",
+      "sha256": "b2794fea58892c2e128b3bb5ceee0e64ebcb6fbbf8483ee21941ea614cae9561",
+      "bytes": 2449
     },
     {
       "path": "report/WRITEUP.md",
@@ -239,6 +244,26 @@
       "bytes": 572
     },
     {
+      "path": "report/regional_activity_surprise_heterogeneity.csv",
+      "sha256": "5ee65f7af31604e98400f99c716077b6c51b2a7e5551f352d02d1ee1736224e6",
+      "bytes": 644
+    },
+    {
+      "path": "report/regional_control_coverage.csv",
+      "sha256": "b3682ef4d67d9c3dc38f74cd5e25e289b6e4a1693318dc8da9c78d2e9dbff919",
+      "bytes": 203
+    },
+    {
+      "path": "report/regional_cycle_adjusted_did.csv",
+      "sha256": "c83123807747a88c50c448e409080840e371f0d8c2e705128c12a2166de17ad2",
+      "bytes": 625
+    },
+    {
+      "path": "report/regional_high_surprise_exclusion.csv",
+      "sha256": "64de1cbcc1ccbc8f7f931b1c51b44fb2f9167ce7e171609fc0f89bd3f6c20c12",
+      "bytes": 695
+    },
+    {
       "path": "report/synthetic_paths.csv",
       "sha256": "1ba6e8f1f07777ae9bf33035c15cfc180645f1b63d5cf563ca379a5faac8a23f",
       "bytes": 391
@@ -324,6 +349,11 @@
       "bytes": 3298
     },
     {
+      "path": "scripts/run_regional_control_specs.py",
+      "sha256": "74e508bcfd05b21f8bb82f00778048905e11cee2576c9418b74a0d05251b1a96",
+      "bytes": 2692
+    },
+    {
       "path": "scripts/run_research_extensions.py",
       "sha256": "58d8997708130fa374ff3c06f6b2872d2d27a6dcecd10a36b04809b74799f2d1",
       "bytes": 1687
@@ -355,8 +385,8 @@
     },
     {
       "path": "src/causal_policy_evaluation/__init__.py",
-      "sha256": "c7f142360ab4dc86558070a497549e6ec49be841155afedf183abb6c7671f0ec",
-      "bytes": 152
+      "sha256": "9021b4197ec67c8d7ff77c7adea73a5ec444b8c7ca9a097ae743bc61e60432f8",
+      "bytes": 173
     },
     {
       "path": "src/causal_policy_evaluation/data.py",
@@ -414,6 +444,11 @@
       "bytes": 6915
     },
     {
+      "path": "src/causal_policy_evaluation/regional_controls.py",
+      "sha256": "bb8e7bfb9cc2f116f6e9c4e4ffa3c19a0721dd60ce794daadb1049719548b645",
+      "bytes": 7609
+    },
+    {
       "path": "src/causal_policy_evaluation/reporting.py",
       "sha256": "d8138ed38795f80e47d9a7c513b64575989a568bceb8c35fff0f7a0847bd62fe",
       "bytes": 4660
@@ -435,8 +470,8 @@
     },
     {
       "path": "tests/test_smoke_pipeline.py",
-      "sha256": "28bdeabca55365d5471dbc4ade266bafa9b123381c53f8b4bcac29161b62ed2d",
-      "bytes": 7587
+      "sha256": "c6a5b625abad53341c795dd8f62b07d673212bed5deadc6ad06beac0758480ba",
+      "bytes": 10142
     }
   ]
 }

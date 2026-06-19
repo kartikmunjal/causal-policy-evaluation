@@ -1,4 +1,4 @@
-.PHONY: install smoke validation diagnostics research fred-policy national-findings shift-share spatial-rdd report manifest test
+.PHONY: install smoke validation diagnostics research fred-policy national-findings regional-controls shift-share spatial-rdd report manifest test
 
 PYTHON ?= .venv/bin/python
 PIP ?= .venv/bin/pip
@@ -8,6 +8,7 @@ HS_NAICS_CROSSWALK ?= data/raw/hs6_naics_crosswalk.csv
 QCEW_INDUSTRY ?= data/processed/qcew_county_industry_panel.parquet
 COUNTY_TO_CZ ?= data/raw/county_to_commuting_zone.csv
 SPATIAL_RDD_PANEL ?= data/processed/spatial_border_distance_panel.parquet
+REGIONAL_CONTROLS ?= ../regional-activity-nowcast/report/state_year_policy_controls.csv
 
 install:
 	$(PIP) install -r requirements.txt
@@ -26,6 +27,9 @@ fred-policy:
 
 national-findings:
 	PYTHONPATH=src $(PYTHON) scripts/run_national_findings.py
+
+regional-controls:
+	PYTHONPATH=src $(PYTHON) scripts/run_regional_control_specs.py --regional-controls $(REGIONAL_CONTROLS)
 
 shift-share:
 	PYTHONPATH=src $(PYTHON) scripts/run_shift_share.py --us-imports $(US_IMPORTS) --instrument-trade $(INSTRUMENT_TRADE) --crosswalk $(HS_NAICS_CROSSWALK) --qcew-industry $(QCEW_INDUSTRY) --county-to-cz $(COUNTY_TO_CZ)

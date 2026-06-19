@@ -19,6 +19,13 @@ from causal_policy_evaluation.minimum_wage import detect_minimum_wage_changes, f
 from causal_policy_evaluation.plots import plot_event_study
 from causal_policy_evaluation.policy import policy_seed, validate_policy_table
 from causal_policy_evaluation.rdd import density_balance_diagnostics, run_local_linear_rdd
+from causal_policy_evaluation.regional_controls import (
+    estimate_activity_surprise_heterogeneity,
+    estimate_excluding_high_surprise_years,
+    estimate_regional_cycle_adjusted_did,
+    merge_regional_controls,
+    regional_control_coverage,
+)
 from causal_policy_evaluation.shift_share import (
     aggregate_trade_to_naics,
     build_cz_industry_shares,
@@ -190,3 +197,55 @@ def test_spatial_rdd_requires_real_signed_distance_and_estimates():
     assert estimate.nobs == 12
     assert estimate.estimate > 0
     assert diagnostics.loc[0, "left_n"] == 6
+
+
+def test_regional_controls_merge_and_specs_smoke():
+    rows = []
+    for state_idx, state in enumerate(["CA", "TX", "FL"]):
+        for county_idx in range(2):
+            county = f"{state}{county_idx}"
+            for year in range(2018, 2023):
+                treated = int(state in {"CA", "TX"})
+                post = int(year >= 2020)
+                rows.append(
+                    {
+                        "county_fips": county,
+                        "year": year,
+                        "employment": 100 + state_idx * 10 + county_idx + 2 * (year - 2018) - 3 * treated * post,
+                        "wages": 100000 + 1000 * state_idx + 100 * year,
+                        "establishments": 10 + county_idx,
+                        "pair_id": f"pair_{state_idx}_{county_idx}",
+                        "state": state,
+                        "treated": treated,
+                        "post": post,
+                        "relative_year": year - 2020 if treated else pd.NA,
+                        "log_employment": 0.0,
+                        "minimum_wage": 10.0 if treated else 7.25,
+                    }
+                )
+    panel = pd.DataFrame(rows)
+    panel["log_employment"] = panel["employment"].map(lambda x: pd.NA if x <= 0 else __import__("math").log(x))
+    controls = pd.DataFrame(
+        [
+            {
+                "state": state,
+                "year": year,
+                "avg_activity_index": state_idx + 0.1 * (year - 2018),
+                "avg_activity_momentum": 0.1,
+                "avg_negative_indicator_breadth": 0.25 + 0.05 * state_idx,
+                "gdp_qoq_ann": 2.0 + state_idx,
+                "avg_activity_surprise": (-1) ** year * 0.2 * (state_idx + 1),
+            }
+            for state_idx, state in enumerate(["CA", "TX", "FL"])
+            for year in range(2017, 2023)
+        ]
+    )
+    merged = merge_regional_controls(panel, controls)
+    coverage = regional_control_coverage(merged)
+    adjusted = estimate_regional_cycle_adjusted_did(merged)
+    heterogeneity = estimate_activity_surprise_heterogeneity(merged)
+    exclusion = estimate_excluding_high_surprise_years(merged)
+    assert coverage.loc[0, "matched_share"] == 1.0
+    assert not adjusted.empty
+    assert not heterogeneity.empty
+    assert not exclusion.empty

@@ -1,0 +1,5 @@
+outcome,term,specification,estimate,std_error,p_value,nobs,covariance,status
+log_employment,treated_post_x_lag_surprise,lagged_activity_surprise_interaction,-0.0036315932993738237,27.40535438797484,0.9998942691207279,2787,clustered_state,ok
+log_establishments,treated_post_x_lag_surprise,lagged_activity_surprise_interaction,0.001981832551946184,,,2783,clustered_state,ok
+log_emp_per_establishment,treated_post_x_lag_surprise,lagged_activity_surprise_interaction,-0.0002601102131484857,,,2783,clustered_state,ok
+log_avg_annual_pay,treated_post_x_lag_surprise,lagged_activity_surprise_interaction,0.0014598401739819855,,,2490,clustered_state,ok

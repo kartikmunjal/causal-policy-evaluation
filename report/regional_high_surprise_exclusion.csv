@@ -1,0 +1,5 @@
+outcome,term,specification,excluded_threshold,estimate,std_error,p_value,nobs,covariance,status
+log_employment,treated:post,exclude_abs_lag_surprise_above_p75,4.126898636059006,0.24940381931324357,3163.0599247618115,0.9999370876741628,2121,clustered_state,ok
+log_establishments,treated:post,exclude_abs_lag_surprise_above_p75,4.126898636059006,-0.05903100838405808,212.23820096827964,0.9997780798679214,2119,clustered_state,ok
+log_emp_per_establishment,treated:post,exclude_abs_lag_surprise_above_p75,4.126898636059006,0.8923165882267481,,,2119,clustered_state,ok
+log_avg_annual_pay,treated:post,exclude_abs_lag_surprise_above_p75,4.126898636059006,0.04572272677402395,,,1883,clustered_state,ok

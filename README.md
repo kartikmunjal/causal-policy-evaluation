@@ -44,6 +44,8 @@ Phase 5 adds a connected labor-demand research design: a China-shock shift-share
 
 Phase 6 adds a spatial RDD robustness scaffold for state-border policy jumps. It requires a documented `signed_distance_km` running variable from public geometry and refuses to manufacture a discontinuity from treatment status. See `report/PHASE_6_SPATIAL_RDD.md`.
 
+Phase 7 connects this repo to `regional-activity-nowcast`. It merges verified public-data regional activity controls and nowcast surprises into the national border-county panel, then runs lagged regional-cycle controls, activity-surprise heterogeneity, and high-surprise-year exclusion checks. See `report/PHASE_7_REGIONAL_CYCLE_CONTROLS.md`.
+
 A price-index construction project is best kept as a standalone follow-on repo because it is a measurement contribution, not a direct causal estimate in this minimum-wage border design.
 
 ## Identifying Assumptions
@@ -61,6 +63,7 @@ Free public data sources:
 - Census county adjacency for cross-state border-pair construction.
 - Trade-shock extension inputs: public import data by HS6/year, Pierce-Schott style HS-to-NAICS concordances, and Dorn commuting-zone crosswalks.
 - Spatial RDD extension inputs: public county geometry and border-distance construction with signed distance to the relevant state border.
+- Regional-cycle extension input: `regional-activity-nowcast/report/state_year_policy_controls.csv`, generated from verified FRED and BEA public data.
 
 Fetch scripts cache raw files under `data/raw/` and write provenance metadata with fetch date, vintage, URL, and cleaning notes. The FRED minimum-wage fetch uses public CSV graph endpoints and does not require an API key. Other FRED or Census endpoints, if added later, should use environment variables such as `FRED_API_KEY` and `CENSUS_API_KEY`.
 
@@ -94,6 +97,15 @@ Current national snapshot using FRED/DOL policy timing, Census county adjacency,
 - National margin decomposition: employment -0.0649, establishments -0.0049, employment per establishment -0.2202, average annual pay 0.0199 log points.
 - National bite/dose-response estimates: employment 0.0014, employment per establishment 0.0600, average annual pay -0.0075.
 - Several state-clustered SEs remain unstable or undefined in high-dimensional specs; the report preserves those missing SEs rather than manufacturing precision.
+
+Regional-cycle bridge snapshot using verified live controls from `regional-activity-nowcast`:
+
+- Matched rows: 5,021 of 23,219 national panel rows across 10 states.
+- Treated-row coverage: 23.9%; control-row coverage: 18.9%.
+- Lagged regional-cycle controlled employment estimate: 0.0046 log points on 4,464 matched rows.
+- Lagged activity-surprise interaction for employment: -0.0036, with unstable clustered precision.
+- Dropping high absolute lagged-surprise state-years gives an employment estimate of 0.2494, also with unstable precision.
+- Interpretation: the live macro-control bridge is operational, but current 10-state coverage is too narrow for a definitive national causal claim.
 
 Required outputs:
 
@@ -130,12 +142,18 @@ Required outputs:
 - `report/spatial_rdd_estimates.csv`
 - `report/spatial_rdd_diagnostics.csv`
 - `report/spatial_rdd_identification_notes.csv`
+- `report/regional_control_coverage.csv`
+- `report/regional_cycle_adjusted_did.csv`
+- `report/regional_activity_surprise_heterogeneity.csv`
+- `report/regional_high_surprise_exclusion.csv`
 
 ## Robustness Summary
 
 The robustness plan includes synthetic control for the treated county path, donor weights, placebo/permutation inference, placebo policy years, joint pre-trend tests, wild-cluster bootstrap diagnostics, leave-one-state-out hooks, and raw-trend/balance tables. The secondary IV design constructs a Bartik-style shift-share instrument for local labor demand and estimates 2SLS with `linearmodels`, reporting first-stage strength.
 
 The trade-shock extension adds concordance-loss audits and Rotemberg-style industry influence weights so the identifying variation can be inspected. The spatial RDD extension is a robustness check only and requires a real signed distance-to-border variable.
+
+The regional-cycle extension uses live regional nowcast controls as robustness and heterogeneity checks. These controls do not replace the primary DiD/event-study design, and coverage is partial unless the regional nowcast pilot is expanded to all policy-panel states.
 
 RDD is skipped unless a genuine sharp public-data eligibility threshold is identified. No discontinuity is fabricated.
 
@@ -193,6 +211,13 @@ PYTHONPATH=src .venv/bin/python scripts/run_spatial_rdd.py \
   --running-col signed_distance_km
 ```
 
+Regional-cycle robustness, after running the regional nowcast repo:
+
+```bash
+PYTHONPATH=src .venv/bin/python scripts/run_regional_control_specs.py \
+  --regional-controls ../regional-activity-nowcast/report/state_year_policy_controls.csv
+```
+
 Offline smoke check:
 
 ```bash
@@ -210,6 +235,7 @@ make smoke PYTHON=.venv/bin/python
 make validation PYTHON=.venv/bin/python
 make fred-policy PYTHON=.venv/bin/python
 make national-findings PYTHON=.venv/bin/python
+make regional-controls PYTHON=.venv/bin/python
 make shift-share PYTHON=.venv/bin/python
 make spatial-rdd PYTHON=.venv/bin/python
 make test PYTHON=.venv/bin/python

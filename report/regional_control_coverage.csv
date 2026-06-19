@@ -1,0 +1,4 @@
+sample,rows,matched_rows,matched_share,states,matched_states
+all_rows,23219,5021,0.2162453163357595,48,10
+treated_rows,12716,3033,0.2385184020132117,30,7
+control_rows,10503,1988,0.18927925354660574,18,3
